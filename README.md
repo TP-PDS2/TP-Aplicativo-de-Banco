@@ -6,8 +6,11 @@
 *User Stories:* 
 
 _Verficar Saldo Bancário:_
+
 *Descrição:* 
+
 Como um cliente, eu quero poder verificar o saldo da minha conta corrente através do aplicativo do banco para acompanhar meu dinheiro.
+
 *Critérios de aceitação:* 
 - Quero conseguir fazer login com sucesso se segurança no aplicativo.
 - Ver o saldo da conta de maneira clara e precisa.
