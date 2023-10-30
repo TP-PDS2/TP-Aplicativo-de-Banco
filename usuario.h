@@ -14,7 +14,6 @@ class Usuário{
    void remove(const string& usuario_);
   //REMOVE UM USUÁRIO
 
-  private:
   bool senha_valida(const string& senha) const;//uma verificação de senhas válidas?
   private:
   struct Usuario {
