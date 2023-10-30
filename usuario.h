@@ -11,7 +11,7 @@ class Usuário{
               const string& senha);
   //INSERE UM USUÁRIO
 
-   void remove(const usuario_& url);
+   void remove(const string& usuario_);
   //REMOVE UM USUÁRIO
 
   private:
