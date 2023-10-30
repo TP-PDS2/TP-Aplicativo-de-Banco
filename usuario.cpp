@@ -7,12 +7,12 @@ void insert(const string& usuario_,
               const string& senha){ //INSERE UM USUÁRIO
   
   if (senha_valida(senha)) {
-    auto it = senha.find(usuario_);
-    if (it == senha.end()) {
+    auto it = senha_.find(usuario_);
+    if (it == senha_.end()) {
       Usuario usuario_;
       usuario_.nome = nome;
       usuario_.senha = senha;
-      senha[usuario] = usuario_;
+      senha_[usuario] = usuario_;
     }
   }
 }
