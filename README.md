@@ -40,25 +40,39 @@ Os usuários podem cadastrar novos clientes, editar informações pessoais e rem
 COMANDOS GERAIS:
 
 *'cadastrar cliente'
+
 *'mostrar meus dados'
+
 *'editar meus dados'
+
 *'apagar minha conta'
+
 *'efetuar logout'
+
+
 <br />
-PERMISSÃO 0 (NINGUÉM LOGADO)
+PERMISSÃO 0 (NINGUÉM LOGADO):
 <br />
 
 *'logar cliente'
+
 *'cadastrar conta'
+
 *'recuperar conta'
+
+
 <br />
-PERMISSÃO 1 (CLIENTE)
+PERMISSÃO 1 (CLIENTE):
 <br />
 
 *'mostrar extrato'
+
 *'mostrar dados da conta corrente'
+
 *'realizar transferência'
+
 *'solicitar empréstimo'
+
 *'fazer logout'
 
 # User Stories: 
