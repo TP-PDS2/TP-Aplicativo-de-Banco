@@ -17,12 +17,10 @@ void insert(const string& usuario_,
   }
 }
 
-  
-
 void remove(const string& usuario_){  //REMOVE UM USUÁRIO
+  
 }
  
-
 bool senha_valida(const string& senha) const{//uma verificação de senhas válidas?
 
   if (senha.length() < 8 || senha.length() > 30 {   // Comprimento mínimo e máximo
