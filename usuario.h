@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <cctype>
 
 using std::map;
 using std::string;
