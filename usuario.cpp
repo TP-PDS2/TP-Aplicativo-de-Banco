@@ -20,12 +20,6 @@ void insert(const string& usuario_,
   
 
 void remove(const string& usuario_){  //REMOVE UM USUÁRIO
-  for (auto it = usuario_.begin(); it != usuario_.end(); ++it) {
-    if (it->usuario == usuario_) {
-      it = usuario_.erase(it); 
-      return;
-    }
-  }
 }
  
 
