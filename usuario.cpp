@@ -24,5 +24,14 @@ void remove(const string& usuario_){  //REMOVE UM USUÁRIO
  
 
 bool senha_valida(const string& senha) const{//uma verificação de senhas válidas?
-  
+
+  if (senha.length() < 8 || senha.length() > 30 {   // Comprimento mínimo e máximo
+    return false;
+  } else if (senha.find("12345678") != std::string::npos){
+    return false;
+  } else if (senha.find("87654321") != std::string::npos){
+    return false;
+  } else if (senha.find("senha") != std::string::npos){
+    return false;
+  }
 }
