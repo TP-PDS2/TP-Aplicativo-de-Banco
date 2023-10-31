@@ -18,7 +18,10 @@ void insert(const string& usuario_,
 }
 
 void remove(const string& usuario_){  //REMOVE UM USUÁRIO
-  
+   auto it = usuario.find(usuario_);
+    if (it != usuario.end()) {
+        usuario.erase(it);
+    }
 }
  
 bool senha_valida(const string& senha) const{//uma verificação de senhas válidas?
