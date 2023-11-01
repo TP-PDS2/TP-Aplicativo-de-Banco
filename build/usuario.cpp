@@ -54,3 +54,8 @@ bool senha_valida(const string& senha) const{//uma verificação de senhas váli
     return false;
   }
 }
+
+  bool redefinirsenha(const std::string& usuario){
+    
+  }   //REDEFINE A SENHA DO USUÁRIO ATRAVÉS DE UM TOKEN DE CONFIRMAÇÃO
+  //(essa função ainda não pode ser implementada pois depende de estruturas que só serão criadas dentro de outras classes)
