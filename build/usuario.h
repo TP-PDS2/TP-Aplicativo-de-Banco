@@ -33,6 +33,3 @@ class Usuário{
   };
  map<string, Usuario> senha_;
 };
-
-  
-}
