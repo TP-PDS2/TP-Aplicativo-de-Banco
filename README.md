@@ -142,6 +142,7 @@ Como um cliente, eu quero poder solicitar empréstimos ou financiamentos diretam
 
 
 
+# Descrição da funcionalidade das classes
 
 
 
