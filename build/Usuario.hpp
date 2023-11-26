@@ -8,26 +8,22 @@
 class Usuario {
 public:
     void insert(const std::string& usuario_,
-                const std::string& nome,
-                const std::string& senha);
-    // INSERE UM USUÁRIO
+                const std::string& nome_,
+                const std::string& senha_);
 
     void remove(const std::string& usuario_);
-    // REMOVE UM USUÁRIO
 
-    bool redefinirSenha(const std::string& usuario);
-    // REDEFINE A SENHA DO USUÁRIO ATRAVÉS DE UM TOKEN DE CONFIRMAÇÃO
+    bool redefinirSenha(const std::string& usuario_);
+    
+private:
+    bool senhaValida(const std::string& senha_) const;
 
 private:
-    bool senhaValida(const std::string& senha) const;
-    // VERIFICA SE A SENHA ATENDE AOS REQUISITOS
-
-private:
-    struct Usuar_ {
-        std::string usuario_;  // CPF do usuário.
-        std::string senha;     // senha do usuário.
+    struct DadosUsuario_ {
+        std::string usuario_;
+        std::string senha_;
     };
-    std::map<std::string, Usuar_> senha_;
+    std::map<std::string, DadosUsuario_> usuariosRegistrados_;
 };
 
-#endif
+#endif // USUARIO_HPP
