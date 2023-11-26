@@ -10,6 +10,26 @@ void Usuario::insert(const std::string& usuario_,
             usuarioTemp.usuario_ = usuario_;
             usuarioTemp.senha_ = senha_;
             usuariosRegistrados_[usuario_] = usuarioTemp;
+        } }
+     else {
+        tentativasSenha_++;
+        if (tentativasSenha_ >= 2) {
+            std::cout << "Você errou a senha duas vezes. Deseja mudar a senha? (0 para não, 1 para sim): ";
+            int opcao;
+            std::cin >> opcao;
+
+            if (opcao == 1) {
+                std::string novaSenha;
+                std::cout << "Digite a nova senha: ";
+                std::cin >> novaSenha;
+
+                if (senhaValida(novaSenha)) {
+                    usuariosRegistrados_[usuario_].senha_ = novaSenha;
+                    std::cout << "Senha alterada com sucesso!" << std::endl;
+                } else {
+                    std::cout << "Nova senha inválida. A senha não foi alterada." << std::endl;
+                }
+            }
         }
     }
 }
