@@ -1,59 +1,54 @@
 #include "Usuario.hpp"
 
 void Usuario::insert(const std::string& usuario_,
-                     const std::string& nome,
-                     const std::string& senha) {
-    if (senhaValida(senha)) {
-        auto it = senha_.find(usuario_);
-        if (it == senha_.end()) {
-            Usuar_ usuarioTemp;
+                     const std::string& nome_,
+                     const std::string& senha_) {
+    if (senhaValida(senha_)) {
+        auto it = usuariosRegistrados_.find(usuario_);
+        if (it == usuariosRegistrados_.end()) {
+            DadosUsuario usuarioTemp;
             usuarioTemp.usuario_ = usuario_;
-            usuarioTemp.senha = senha;
-            senha_[usuario_] = usuarioTemp;
+            usuarioTemp.senha_ = senha_;
+            usuariosRegistrados_[usuario_] = usuarioTemp;
         }
     }
 }
 
 void Usuario::remove(const std::string& usuario_) {
-    auto it = senha_.find(usuario_);
-    if (it != senha_.end()) {
-        senha_.erase(it);
+    auto it = usuariosRegistrados_.find(usuario_);
+    if (it != usuariosRegistrados_.end()) {
+        usuariosRegistrados_.erase(it);
     }
 }
 
-bool Usuario::senhaValida(const std::string& senha) const {
-    if (senha.length() < 8 || senha.length() > 30) { // verifica se está entre o comprimento mínimo (8) e máximo (30)
+bool Usuario::senhaValida(const std::string& senha_) const {
+    if (senha_.length() < 8 || senha_.length() > 30) { // verifica se está entre o comprimento mínimo (8) e máximo (30)
         return false;
-    } else if (senha.find("12345678") != std::string::npos) { // verifica se não é uma sequência
-        return false;
-    } else if (senha.find("87654321") != std::string::npos) {  // verifica se não é uma sequência
-        return false;
-    } else if (senha.find("senha") != std::string::npos) { // verifica se a senha não possui a palavra "senha"
+    } else if (senha_.find("12345678") != std::string::npos || 
+               senha_.find("87654321") != std::string::npos ||
+               senha_.find("senha") != std::string::npos) { // verifica se não contém sequências ou palavras proibidas
         return false;
     }
     
-    bool eh_maiuscula = false;
-    bool eh_digito = false;
-    bool eh_cespecial = false;
+    bool temMaiuscula = false;
+    bool temDigito = false;
+    bool temCaracterEspecial = false;
 
-    for (char c : senha) {
+    for (char c : senha_) {
         if (std::isupper(c)) { // verifica se a senha possui pelo menos um caractere maiúsculo
-            eh_maiuscula = true;
+            temMaiuscula = true;
         } else if (std::isdigit(c)) { // verifica se a senha possui pelo menos um dígito
-            eh_digito = true;
+            temDigito = true;
         } else if (std::ispunct(c)) { // verifica se a senha possui pelo menos um caractere especial
-            eh_cespecial = true;
+            temCaracterEspecial = true;
         }
     }
 
-    if (eh_maiuscula && eh_digito && eh_cespecial) { // os três requisitos são atendidos
-        return true;
-    } else {
-        return false;
-    }
+    // Os três requisitos são atendidos
+    return temMaiuscula && temDigito && temCaracterEspecial;
 }
 
-bool Usuario::redefinirSenha(const std::string& usuario) {
+bool Usuario::redefinirSenha(const std::string& usuario_) {
     // Implemente a redefinição de senha aqui
     return false; // Retorno falso padrão para a função
 }
