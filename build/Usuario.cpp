@@ -76,7 +76,7 @@ bool Usuario::redefinirSenha(const std::string& usuario_) {
 }
 void Usuario::criarNovoUsuario() {
     DadosUsuario novoUsuario;
-
+    
     std::cout << "Nome completo: ";
     std::getline(std::cin, novoUsuario.nome_);
 
