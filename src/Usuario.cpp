@@ -184,3 +184,11 @@ bool Usuario::senhaValida(const std::string& senha_) const {
     return true;
 }
 
+void Usuario::adicionarSaldo(double valor) {
+    dadosUsuario_.saldo_.adicionarSaldo(valor);
+}
+
+double Usuario::obterSaldo() const {
+    return dadosUsuario_.saldo_.obterSaldo();
+}
+
