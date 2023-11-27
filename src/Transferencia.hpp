@@ -2,12 +2,19 @@
 #define TRANSFERENCIA_HPP
 
 #include <iostream>
+#include <string>
+#include "Usuario.hpp"
 
 class Transferencia {
 public:
-    void realizarTransferencia(int idContaOrigem, int idContaDestino, double valor);
-    void notificarErro();
-    void notificarTransf();
+    
+    Transferencia(Usuario& remetente, Usuario& destinatario);
+
+    void realizarTransferencia(double valor);
+
+private:
+    Usuario& remetente_;
+    Usuario& destinatario_;
 };
 
 #endif
