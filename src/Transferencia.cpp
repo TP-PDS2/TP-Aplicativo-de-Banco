@@ -1,4 +1,4 @@
-//to com sono tem que dar um jeito de fazer o destinatario ter o dinheiro somado e quem esta enviando ter o dinheiro acrescido na hora da transferencia 
+//to com sono tem que dar um jeito de fazer o destinatario ter o dinheiro somado e quem esta enviando ter o dinheiro decrescido na hora da transferencia 
 #include "Transferencia.hpp"
 
 Transferencia::Transferencia(Usuario& remetente, Usuario& destinatario)
