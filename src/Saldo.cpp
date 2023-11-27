@@ -1,9 +1,11 @@
 #include "Saldo.hpp"
 
-double Saldo::getSaldo() const {
-    return saldo;
+Saldo::Saldo() : saldo_(0.0) {}
+
+void Saldo::adicionarSaldo(double valor) {
+    saldo_ += valor;
 }
 
-void Saldo::setSaldo(double novoSaldo) {
-    saldo = novoSaldo;
+double Saldo::obterSaldo() const {
+    return saldo_;
 }
