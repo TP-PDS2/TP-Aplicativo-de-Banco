@@ -2,15 +2,16 @@
 #define SALDO_HPP
 
 class Saldo {
-private:
-    double saldo;
-
 public:
-    // Getter para saldo
-    double getSaldo() const;
+    Saldo();
 
-    // Setter para saldo
-    void setSaldo(double novoSaldo);
+    void adicionarSaldo(double valor);
+
+    // Obter saldo atual
+    double obterSaldo() const;
+
+private:
+    double saldo_;
 };
 
-#endif
+#endif // SALDO_HPP
