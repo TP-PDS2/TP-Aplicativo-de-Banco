@@ -5,7 +5,9 @@
 #include <set>
 #include <string>
 #include <cctype>
+#include "SistemaBancario.hpp"
 #include <iostream>
+#include "Saldo.hpp"
 
 class Usuario {
 public:
@@ -17,11 +19,16 @@ public:
 
     // Novo método para criar um novo usuário
     void criarNovoUsuario();
-
    void adicionarSaldo(double valor);
    double obterSaldo() const;
+   bool fazerLogin();
+   void realizarOperacoesAposLogin();
+   void fazerLogout();
+   void mostrarInformacoesUsuario();
+   bool excluirConta();
 
 private:
+    std::string usuarioAtual_;
     bool senhaValida(const std::string& senha_) const;
 
 private:
@@ -35,8 +42,7 @@ private:
         int anoNascimento_;
         std::string numeroContaCorrente_; // Adicionando o número de conta corrente
     };
-
-Saldo saldo_; //objeto de saldo 
+    Saldo saldo;
 
     std::map<std::string, DadosUsuario_> usuariosRegistrados_;
     std::set<std::string> numerosContaCorrenteGerados_; // Conjunto para armazenar números de conta corrente gerados
@@ -44,7 +50,7 @@ Saldo saldo_; //objeto de saldo
     int tentativasSenha_;
 
     // Função auxiliar para gerar número de conta corrente aleatório
-    std::string gerarNumeroContaCorrente() const;
+    std::string gerarNumeroContaCorrente();
 };
 
-#endif // USUARIO_HPP
+#endif
