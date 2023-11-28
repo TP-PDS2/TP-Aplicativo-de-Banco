@@ -4,14 +4,12 @@
 class Saldo {
 public:
     Saldo();
-
-    void adicionarSaldo(double valor);
-
-    // Obter saldo atual
     double obterSaldo() const;
+    void adicionarSaldo(double valor);
+    bool diminuirSaldo(double valor);
 
 private:
-    double saldo_;
+    double saldo;
 };
 
 #endif // SALDO_HPP
