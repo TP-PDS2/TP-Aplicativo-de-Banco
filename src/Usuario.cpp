@@ -1,84 +1,16 @@
 #include <ctime>
 #include <cstdlib>
+#include <limits>
 #include <algorithm>
+#include <cctype>
+#include <iomanip>
 #include "Usuario.hpp"
 
-#include "Usuario.hpp"
-
-Usuario::Usuario() : tentativasSenha_(0) {
-    srand(time(nullptr));
-}
-void Usuario::insert(const std::string& usuario_, const std::string& senha_, const std::string& opcao_) {
-    if (senhaValida(senha_)) {
-        auto it = usuariosRegistrados_.find(usuario_);
-        if (it == usuariosRegistrados_.end()) {
-            DadosUsuario_ usuarioTemp;
-            usuarioTemp.usuario_ = usuario_;
-            usuarioTemp.senha_ = senha_;
-            usuarioTemp.opcao_ = opcao_;
-            usuariosRegistrados_[usuario_] = usuarioTemp;
-            std::cout << "Usuário registrado com sucesso!" << std::endl;
-        }
-    } else {
-        tentativasSenha_++;
-        if (tentativasSenha_ >= 2) {
-            std::cout << "Você errou a senha duas vezes. Deseja mudar a senha? (0 para não, 1 para sim): ";
-            int opcao;
-            std::cin >> opcao;
-
-            if (opcao == 1) {
-                std::string novaSenha;
-                std::cout << "Digite a nova senha: ";
-                std::cin.ignore();
-                std::getline(std::cin, novaSenha);
-
-                if (senhaValida(novaSenha)) {
-                    usuariosRegistrados_[usuario_].senha_ = novaSenha;
-                    std::cout << "Senha alterada com sucesso!" << std::endl;
-                } else {
-                    std::cout << "Nova senha inválida. A senha não foi alterada." << std::endl;
-                }
-            }
-        }
-    }
-}
-void Usuario::remove(const std::string& usuario_) {
-    auto it = usuariosRegistrados_.find(usuario_);
-    if (it != usuariosRegistrados_.end()) {
-        usuariosRegistrados_.erase(it);
-        std::cout << "Usuário removido com sucesso!" << std::endl;
-    } else {
-        std::cout << "Usuário não encontrado. Nenhum usuário foi removido." << std::endl;
-    }
-}
-
-bool Usuario::redefinirSenha(const std::string& usuario_) {
-    try {
-        auto& dadosUsuario = usuariosRegistrados_.at(usuario_);
-
-        std::string novaSenha;
-        std::cout << "Digite a nova senha: ";
-        std::cin.ignore();
-        std::getline(std::cin, novaSenha);
-
-        if (senhaValida(novaSenha)) {
-            dadosUsuario.senha_ = novaSenha;
-            std::cout << "Senha redefinida com sucesso!" << std::endl;
-            return true;
-        } else {
-            std::cout << "Nova senha inválida. A senha não foi alterada." << std::endl;
-            return false;
-        }
-    } catch (const std::out_of_range& e) {
-        std::cout << "Usuário não encontrado. Não foi possível redefinir a senha." << std::endl;
-        return false;
-    }
-}
 void Usuario::criarNovoUsuario() {
-    DadosUsuario novoUsuario;
+    DadosUsuario_ novoUsuario;
     
     std::cout << "Nome completo: ";
-    std::getline(std::cin, novoUsuario.nome_);
+    std::getline(std::cin >> std::ws, novoUsuario.nome_);
 
     std::cout << "Endereço: ";
     std::getline(std::cin, novoUsuario.endereco_);
@@ -93,6 +25,12 @@ void Usuario::criarNovoUsuario() {
 
     std::cout << "Ano de nascimento: ";
     std::cin >> novoUsuario.anoNascimento_;
+    
+    std::cout << "\nRequisitos para senha:\n"
+              << "- Deve ter entre 8 e 30 caracteres.\n"
+              << "- Deve conter pelo menos uma letra maiúscula.\n"
+              << "- Deve conter pelo menos um caractere especial.\n"
+              << "- Deve conter pelo menos um número.\n";
 
     do {
         std::cout << "Senha desejada: ";
@@ -107,27 +45,49 @@ void Usuario::criarNovoUsuario() {
     novoUsuario.numeroContaCorrente_ = gerarNumeroContaCorrente();
 
     usuariosRegistrados_[novoUsuario.usuario_] = novoUsuario;
-
+    
+    std::cout << "\n========================================\n";
     std::cout << "Novo usuário criado com sucesso!" << std::endl;
-}
-std::string Usuario::obterEndereco(const std::string& usuario_) const {
-    try {
-        auto it = usuariosRegistrados_.at(usuario_);
-        return it.endereco_;
-    } catch (const std::out_of_range& e) {
-        return "Usuário não encontrado";
-    }
+    std::cout << "\n========================================\n";
 }
 
-std::string Usuario::gerarNumeroContaCorrente() const {
+bool Usuario::senhaValida(const std::string& senha_) const {
+    if (senha_.length() < 8 || senha_.length() > 30) {
+        std::cout << "A senha deve ter entre 8 e 30 caracteres." << std::endl;
+        return false;
+    }
+
+    bool temMaiuscula = false;
+    bool temCaracterEspecial = false;
+    bool temNumero = false;
+
+    for (char c : senha_) {
+        if (std::isupper(c)) {
+            temMaiuscula = true;
+        } else if (std::isdigit(c)) {
+            temNumero = true;
+        } else if (!std::isalnum(c)) {
+            temCaracterEspecial = true;
+        }
+    }
+
+    if (!temMaiuscula || !temNumero || !temCaracterEspecial) {
+        std::cout << "A senha deve atender aos requisitos de maiúsculas, números e caracteres especiais." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+std::string Usuario::gerarNumeroContaCorrente(){
     srand(time(nullptr));
 
     std::string numeroContaCorrente;
     bool numeroDuplicado;
 
     do {
-        int numeroAleatorio = rand() % 9000 + 1000;
-        numeroContaCorrente = "CC" + std::to_string(numeroAleatorio);
+        int numeroAleatorio = rand() % 900000 + 100000;  // Gera 6 números aleatórios
+        numeroContaCorrente = std::to_string(numeroAleatorio);
 
         numeroDuplicado = numerosContaCorrenteGerados_.find(numeroContaCorrente) != numerosContaCorrenteGerados_.end();
     } while (numeroDuplicado);
@@ -136,59 +96,122 @@ std::string Usuario::gerarNumeroContaCorrente() const {
 
     return numeroContaCorrente;
 }
-bool Usuario::senhaValida(const std::string& senha_) const {
-    if (senha_.length() < 8 || senha_.length() > 30) {
-        std::cout << "A senha deve ter entre 8 e 30 caracteres." << std::endl;
-        return false;
-    }
 
-    bool temMaiuscula = false;
-    for (char c : senha_) {
-        if (std::isupper(c)) {
-            temMaiuscula = true;
-            break;
+bool Usuario::fazerLogin() {
+    std::string usuario, senha;
+
+    std::cout << "CPF: ";
+    std::cin >> usuario;
+
+    auto it = usuariosRegistrados_.find(usuario);
+
+    if (it != usuariosRegistrados_.end()) {
+        std::cout << "Senha: ";
+        std::cin >> senha;
+
+        if (senha == it->second.senha_) {
+            std::cout << "\n========================================\n";
+            std::cout << "   Bem-vind" << ((it->second.opcao_ == "feminino") ? "a" : "o") << ", " << it->second.nome_ << "!\n";
+            std::cout << "   Sua conta corrente é CC: " << it->second.numeroContaCorrente_ << "\n";
+            std::cout << "   Seu saldo atual é: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
+            std::cout << "========================================\n";
+            realizarOperacoesAposLogin();
+            return true;
+        } else {
+            std::cout << "\n========================================";
+            std::cout << "Senha incorreta.\n";
+            std::cout << "========================================\n";
         }
-    }
+    } else {
+        std::cout << "\n\n========================================\n\n";
+        std::cout << "Usuário não encontrado.\n";
+        std::cout << "\n\n========================================\n\n";
+    }}
+    
+    void Usuario::realizarOperacoesAposLogin() {
+    int opcao;
+    do {
+        std::cout << "\nEscolha uma ação:\n";
+        std::cout << "1. Fazer um novo depósito\n";
+        std::cout << "2. Mostrar informações do usuário\n";
+        std::cout << "3. Excluir conta do usuário\n";
+        std::cout << "0. Fazer logout e voltar ao menu principal\n";
+        std::cout << "Opção: ";
+        std::cin >> opcao;
 
-    if (!temMaiuscula) {
-        std::cout << "A senha deve conter pelo menos uma letra maiúscula." << std::endl;
-        return false;
-    }
+        switch (opcao) {
+            case 1: {
+                double valorDeposito;
+                std::cout << "Informe o valor que deseja depositar: R$ ";
+                std::cin >> valorDeposito;
 
-    bool temCaracterEspecial = false;
-    for (char c : senha_) {
-        if (!std::isalnum(c)) {
-            temCaracterEspecial = true;
-            break;
+                if (valorDeposito > 0) {
+                    saldo.adicionarSaldo(valorDeposito);
+                    std::cout << "Depósito de R$ " << std::fixed << std::setprecision(2) << valorDeposito << " realizado com sucesso.\n";
+                    std::cout << "Novo saldo: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
+                } else {
+                    std::cout << "Valor de depósito inválido.\n";
+                }
+                break;
+            }
+            case 2:
+                mostrarInformacoesUsuario();
+                break;
+            case 3:
+                if (excluirConta()) {
+                   std::cout << "Conta excluída com sucesso. Fazendo logout...\n";
+                   fazerLogout();
+                   break;
+            }
+                break;
+            case 0:
+                std::cout << "Fazendo logout...\n";
+                fazerLogout();
+            default:
+                std::cout << "Opção inválida. Tente novamente.\n";
         }
-    }
-
-    if (!temCaracterEspecial) {
-        std::cout << "A senha deve conter pelo menos um caractere especial." << std::endl;
-        return false;
-    }
-
-    bool temNumero = false;
-    for (char c : senha_) {
-        if (std::isdigit(c)) {
-            temNumero = true;
-            break;
-        }
-    }
-
-    if (!temNumero) {
-        std::cout << "A senha deve conter pelo menos um número." << std::endl;
-        return false;
-    }
-
-    return true;
+    } while (opcao != 0);
 }
 
-void Usuario::adicionarSaldo(double valor) {
-    dadosUsuario_.saldo_.adicionarSaldo(valor);
+        void Usuario::fazerLogout() {
+    std::cout << "Fazendo logout...\n";
+    SistemaBancario sistemaBancario;
+    sistemaBancario.executarAplicativo();
 }
+      void Usuario::mostrarInformacoesUsuario() {
+    std::string usuario;
+    std::cout << "Informe o CPF do usuário para mostrar as informações: ";
+    std::cin >> usuario;
 
-double Usuario::obterSaldo() const {
-    return dadosUsuario_.saldo_.obterSaldo();
+    auto it = usuariosRegistrados_.find(usuario);
+
+    if (it != usuariosRegistrados_.end()) {
+        std::cout << "\nInformações do usuário:\n";
+        std::cout << "Nome: " << it->second.nome_ << "\n";
+        std::cout << "Endereço: " << it->second.endereco_ << "\n";
+        std::cout << "CPF: " << it->second.cpf_ << "\n";
+        std::cout << "Data de Nascimento: " << it->second.anoNascimento_ << "\n";
+        std::cout << "Conta Corrente: " << it->second.numeroContaCorrente_ << "\n";
+        std::cout << "Saldo Atual: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
+        std::cout << "========================================\n";
+    } else {
+        std::cout << "\nUsuário não encontrado.\n";
+        std::cout << "========================================\n";
+    }
 }
+            bool Usuario::excluirConta() {
+    std::string senha;
 
+    std::cout << "ATENÇÃO: A exclusão da conta é uma ação irreversível.\n";
+    std::cout << "Para confirmar, insira sua senha: ";
+    std::cin >> senha;
+
+    if (senha == usuariosRegistrados_[usuarioAtual_].senha_) {
+        usuariosRegistrados_.erase(usuarioAtual_);
+        std::cout << "Conta excluída com sucesso.\n";
+        return true;
+    } else {
+        std::cout << "Senha incorreta. A exclusão da conta foi cancelada.\n";
+        return false;
+    }
+}
