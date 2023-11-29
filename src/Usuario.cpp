@@ -5,50 +5,76 @@
 #include <cctype>
 #include <iomanip>
 #include "Usuario.hpp"
+#include "Saldo.hpp"
+#include <iostream>
+#include <filesystem>
 
-void Usuario::criarNovoUsuario() {
-    DadosUsuario_ novoUsuario;
+namespace fs = std::filesystem;
+
+
+void Usuario::criarNovoUsuario(const std::string& nomeArquivo) {
+    DadosUsuario novoUsuario;
     
+    system("clear||cls");
+
+    std::cout << "\n=========================================================================\n";
+    std::cout << "Obrigado por escolher o Banco UFMG, por favor, preencha os dados a seguir:\n";
+
     std::cout << "Nome completo: ";
-    std::getline(std::cin >> std::ws, novoUsuario.nome_);
+    std::getline(std::cin >> std::ws, novoUsuario.nome);
 
-    std::cout << "Endereço: ";
-    std::getline(std::cin, novoUsuario.endereco_);
+    std::cout << "Data de Nascimento: ";
+    std::getline(std::cin, novoUsuario.dataNascimento);
 
-    std::cout << "CPF (somente números, no formato XXXXXXXXXXX): ";
-    std::cin >> novoUsuario.cpf_;
+    std::cout << "Endereço Completo: ";
+    std::getline(std::cin, novoUsuario.endereco);
 
-    if (novoUsuario.cpf_.size() != 11 || novoUsuario.cpf_.find_first_not_of("0123456789") != std::string::npos) {
-        std::cout << "CPF inválido. Deve conter exatamente 11 números." << std::endl;
-        return;
-    }
+    bool cpfValido = false;
+    do {
+        std::cout << "CPF (somente números, no formato XXXXXXXXXXX): ";
+        std::cin >> novoUsuario.cpf;
 
-    std::cout << "Ano de nascimento: ";
-    std::cin >> novoUsuario.anoNascimento_;
+        if (std::cin.fail() || novoUsuario.cpf.size() != 11 || novoUsuario.cpf.find_first_not_of("0123456789") != std::string::npos) {
+            system("clear||cls");
+            std::cout << "\n===============================================================\n";
+            std::cout << "CPF inválido. Deve conter exatamente 11 números. Tente novamente.\n";
+            // Limpar o buffer de entrada
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cpfValido = false;  // Defina cpfValido como falso para evitar a adição do usuário com CPF inválido
+        } else if (usuarioExiste(novoUsuario.cpf)) {
+            std::cout << "Usuário com o CPF '" << novoUsuario.cpf << "' já existe.\n";
+            cpfValido = false;  // Defina cpfValido como falso para evitar a adição do usuário com CPF duplicado
+        } else {
+            cpfValido = true;
+        }
+    } while (!cpfValido);
     
+    system("clear||cls");
     std::cout << "\nRequisitos para senha:\n"
               << "- Deve ter entre 8 e 30 caracteres.\n"
               << "- Deve conter pelo menos uma letra maiúscula.\n"
               << "- Deve conter pelo menos um caractere especial.\n"
               << "- Deve conter pelo menos um número.\n";
-
+              
     do {
-        std::cout << "Senha desejada: ";
-        std::cin.ignore();
-        std::getline(std::cin, novoUsuario.senha_);
-    } while (!senhaValida(novoUsuario.senha_));
-
-    novoUsuario.usuario_ = novoUsuario.cpf_;
-    novoUsuario.usuario_.erase(remove_if(novoUsuario.usuario_.begin(), novoUsuario.usuario_.end(),
-                                         [](char c) { return c == '.' || c == '-'; }), novoUsuario.usuario_.end());
-
-    novoUsuario.numeroContaCorrente_ = gerarNumeroContaCorrente();
-
-    usuariosRegistrados_[novoUsuario.usuario_] = novoUsuario;
+        std::cout << "\nSenha desejada: ";
+        std::getline(std::cin >> std::ws, novoUsuario.senha); // Utiliza std::ws para descartar espaços em branco
+    } while (!senhaValida(novoUsuario.senha));
     
+    novoUsuario.numeroContaCorrente = gerarNumeroContaCorrente(); //Vincula a CC ao usuário
+
+    // Adicionar o novo usuário ao vetor
+    usuarios.push_back(novoUsuario);
+    salvarUsuariosEmArquivo("Usuarios.txt");
+    
+    system("clear||cls");
     std::cout << "\n========================================\n";
     std::cout << "Novo usuário criado com sucesso!" << std::endl;
     std::cout << "\n========================================\n";
+    std::cout << "Novo usuário criado com sucesso!\n";
+    std::cout << "CPF: " << novoUsuario.cpf << "\n";
+    std::cout << "Senha: " << novoUsuario.senha << "\n";
 }
 
 bool Usuario::senhaValida(const std::string& senha_) const {
@@ -72,6 +98,7 @@ bool Usuario::senhaValida(const std::string& senha_) const {
     }
 
     if (!temMaiuscula || !temNumero || !temCaracterEspecial) {
+        system("clear||cls");
         std::cout << "A senha deve atender aos requisitos de maiúsculas, números e caracteres especiais." << std::endl;
         return false;
     }
@@ -97,25 +124,103 @@ std::string Usuario::gerarNumeroContaCorrente(){
     return numeroContaCorrente;
 }
 
-bool Usuario::fazerLogin() {
-    std::string usuario, senha;
+void Usuario::salvarUsuariosEmArquivo(const std::string& nomeArquivo) const {
+    std::string nomeArquivoPadronizado = nomeArquivo;
+    std::transform(nomeArquivoPadronizado.begin(), nomeArquivoPadronizado.end(), nomeArquivoPadronizado.begin(), ::tolower);
 
-    std::cout << "CPF: ";
-    std::cin >> usuario;
+    std::ofstream arquivo(nomeArquivoPadronizado, std::ios::app);  // Abre o arquivo no modo de adição
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo para salvar.\n";
+        return;
+    }
 
-    auto it = usuariosRegistrados_.find(usuario);
+    const DadosUsuario& ultimoUsuario = usuarios.back();
+    arquivo << ultimoUsuario.nome << " " << ultimoUsuario.dataNascimento
+            << " " << ultimoUsuario.endereco << " " << ultimoUsuario.cpf << "\n";
+    // Adicione outras informações do usuário conforme necessário
 
-    if (it != usuariosRegistrados_.end()) {
-        std::cout << "Senha: ";
-        std::cin >> senha;
+    arquivo.close();  // Feche o arquivo imediatamente após a escrita
+    std::cout << "Usuários salvos com sucesso no arquivo " << nomeArquivoPadronizado << ".\n";
+}
 
-        if (senha == it->second.senha_) {
+void Usuario::carregarUsuariosDeArquivo(const std::string& nomeArquivo) {
+    std::cout << "Iniciando carregamento de usuários do arquivo " << nomeArquivo << "...\n";
+    std::cout << "Iniciando carregamento de usuários do arquivo " << nomeArquivo << "...\n";
+    std::cout << "Carregando usuários do arquivo " << nomeArquivo << "...\n";
+
+    std::set<std::string> cpfsCarregados;  // Usar um conjunto para garantir CPFs únicos
+
+    // Verificar se o arquivo existe
+    if (fs::exists(nomeArquivo)) {
+        std::ifstream arquivo(nomeArquivo);
+        if (arquivo.is_open()) {
+            // Não limpar usuários existentes, apenas carregar novos
+            DadosUsuario usuario;
+            while (arquivo >> usuario.nome >> usuario.dataNascimento >> usuario.endereco >> usuario.cpf >> usuario.numeroContaCorrente >> usuario.senha) {
+                std::cout << "Lendo dados do usuário: " << usuario.nome << " - CPF: " << usuario.cpf << "\n";
+                // Verificar se o CPF já foi carregado
+                if (cpfsCarregados.find(usuario.cpf) == cpfsCarregados.end()) {
+                    // Este é um novo CPF, adiciona o usuário
+                    usuarios.push_back(usuario);
+                    cpfsCarregados.insert(usuario.cpf);
+                    std::cout << "Usuário carregado: " << usuario.nome << " - CPF: " << usuario.cpf << "\n";
+                } else {
+                    // Já carregamos um usuário com esse CPF
+                    std::cout << "Usuário com CPF duplicado encontrado e ignorado: " << usuario.nome << " - CPF: " << usuario.cpf << "\n";
+                }
+            }
+
+            if (usuarios.empty()) {
+                for (const auto& usuario : usuarios) {
+    std::cout << "Usuário carregado: " << usuario.nome << " - CPF: " << usuario.cpf << "\n";
+}
+                std::cout << "Nenhum usuário foi carregado.\n";
+            } else {
+                std::cout << "Usuários carregados com sucesso do arquivo " << nomeArquivo << ".\n";
+            }
+
+            arquivo.close();
+        } else {
+            std::cout << "Erro ao abrir o arquivo " << nomeArquivo << " para leitura.\n";
+        }
+    } else {
+        std::cout << "O arquivo " << nomeArquivo << " não existe. Criando um novo arquivo.\n";
+
+        // Criar um novo arquivo vazio
+        std::ofstream novoArquivo(nomeArquivo);
+        if (novoArquivo.is_open()) {
+            std::cout << "Novo arquivo " << nomeArquivo << " criado com sucesso.\n";
+            novoArquivo.close();
+        } else {
+            std::cout << "Erro ao criar o novo arquivo " << nomeArquivo << ".\n";
+        }
+    }
+}
+
+bool Usuario::usuarioExiste(const std::string& cpf) const {
+    for (const auto& usuario : usuarios) {
+        if (usuario.cpf == cpf) {
+            return true; // Usuário encontrado
+        }
+    }
+    return false; // Usuário não encontrado
+}
+
+bool Usuario::fazerLogin(const std::string& cpf, const std::string& senha) const {
+    auto it = std::find_if(usuarios.begin(), usuarios.end(), [cpf](const DadosUsuario& usuario) {
+        return usuario.cpf == cpf;
+    });
+
+    system("clear||cls");
+
+    if (it != usuarios.end()) {
+        // Usuário encontrado, verifique a senha
+        if (senha == it->senha) {
             std::cout << "\n========================================\n";
-            std::cout << "   Bem-vind" << ((it->second.opcao_ == "feminino") ? "a" : "o") << ", " << it->second.nome_ << "!\n";
-            std::cout << "   Sua conta corrente é CC: " << it->second.numeroContaCorrente_ << "\n";
+            std::cout << "   Bem-vindx" << it->nome << "!\n";
+            std::cout << "   Sua conta corrente é CC: " << it->numeroContaCorrente << "\n";
             std::cout << "   Seu saldo atual é: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
             std::cout << "========================================\n";
-            realizarOperacoesAposLogin();
             return true;
         } else {
             std::cout << "\n========================================";
@@ -126,92 +231,7 @@ bool Usuario::fazerLogin() {
         std::cout << "\n\n========================================\n\n";
         std::cout << "Usuário não encontrado.\n";
         std::cout << "\n\n========================================\n\n";
-    }}
-    
-    void Usuario::realizarOperacoesAposLogin() {
-    int opcao;
-    do {
-        std::cout << "\nEscolha uma ação:\n";
-        std::cout << "1. Fazer um novo depósito\n";
-        std::cout << "2. Mostrar informações do usuário\n";
-        std::cout << "3. Excluir conta do usuário\n";
-        std::cout << "0. Fazer logout e voltar ao menu principal\n";
-        std::cout << "Opção: ";
-        std::cin >> opcao;
-
-        switch (opcao) {
-            case 1: {
-                double valorDeposito;
-                std::cout << "Informe o valor que deseja depositar: R$ ";
-                std::cin >> valorDeposito;
-
-                if (valorDeposito > 0) {
-                    saldo.adicionarSaldo(valorDeposito);
-                    std::cout << "Depósito de R$ " << std::fixed << std::setprecision(2) << valorDeposito << " realizado com sucesso.\n";
-                    std::cout << "Novo saldo: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
-                } else {
-                    std::cout << "Valor de depósito inválido.\n";
-                }
-                break;
-            }
-            case 2:
-                mostrarInformacoesUsuario();
-                break;
-            case 3:
-                if (excluirConta()) {
-                   std::cout << "Conta excluída com sucesso. Fazendo logout...\n";
-                   fazerLogout();
-                   break;
-            }
-                break;
-            case 0:
-                std::cout << "Fazendo logout...\n";
-                fazerLogout();
-            default:
-                std::cout << "Opção inválida. Tente novamente.\n";
-        }
-    } while (opcao != 0);
-}
-
-        void Usuario::fazerLogout() {
-    std::cout << "Fazendo logout...\n";
-    SistemaBancario sistemaBancario;
-    sistemaBancario.executarAplicativo();
-}
-      void Usuario::mostrarInformacoesUsuario() {
-    std::string usuario;
-    std::cout << "Informe o CPF do usuário para mostrar as informações: ";
-    std::cin >> usuario;
-
-    auto it = usuariosRegistrados_.find(usuario);
-
-    if (it != usuariosRegistrados_.end()) {
-        std::cout << "\nInformações do usuário:\n";
-        std::cout << "Nome: " << it->second.nome_ << "\n";
-        std::cout << "Endereço: " << it->second.endereco_ << "\n";
-        std::cout << "CPF: " << it->second.cpf_ << "\n";
-        std::cout << "Data de Nascimento: " << it->second.anoNascimento_ << "\n";
-        std::cout << "Conta Corrente: " << it->second.numeroContaCorrente_ << "\n";
-        std::cout << "Saldo Atual: R$ " << std::fixed << std::setprecision(2) << saldo.obterSaldo() << "\n";
-        std::cout << "========================================\n";
-    } else {
-        std::cout << "\nUsuário não encontrado.\n";
-        std::cout << "========================================\n";
     }
-}
-            bool Usuario::excluirConta() {
-    std::string senha;
 
-    std::cout << "ATENÇÃO: A exclusão da conta é uma ação irreversível.\n";
-    std::cout << "Para confirmar, insira sua senha: ";
-    std::cin >> senha;
-
-    if (senha == usuariosRegistrados_[usuarioAtual_].senha_) {
-        usuariosRegistrados_.erase(usuarioAtual_);
-        std::cout << "Conta excluída com sucesso.\n";
-        return true;
-    } else {
-        std::cout << "Senha incorreta. A exclusão da conta foi cancelada.\n";
-        return false;
-    }
+    return false;
 }
