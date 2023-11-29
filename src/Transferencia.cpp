@@ -5,6 +5,7 @@ Transferencia::Transferencia(Usuario& remetente, Usuario& destinatario)
     : remetente_(remetente), destinatario_(destinatario) {}
 
 void Transferencia::realizarTransferencia(double valor) {
+    valor = abs(valor);
     if (remetente_.obterSaldo() >= valor) {
         remetente_.adicionarSaldo(-valor);
         destinatario_.adicionarSaldo(valor);
