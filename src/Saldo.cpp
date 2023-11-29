@@ -5,17 +5,17 @@
 Saldo::Saldo() : saldo(0.0) {}
 
 double Saldo::obterSaldo() const {
-    return saldo;
+    return (fabs(saldo));
 }
 
 void Saldo::adicionarSaldo(double valor) {
-    saldo += (abs(valor));
+    saldo += (fabs(valor));
 }
 
 bool Saldo::diminuirSaldo(double valor) {
-    if ((abs(valor)) > saldo) {
+    if ((fabs(valor)) > saldo) {
         return false; // Não há saldo suficiente para a operação
     }
-    saldo -= (abs(valor));
+    saldo -= (fabs(valor));
     return true;
 }
