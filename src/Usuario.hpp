@@ -4,8 +4,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <set>
 #include "Saldo.hpp"
+#include <set>
 
 
 struct DadosUsuario {
@@ -15,25 +15,22 @@ struct DadosUsuario {
     std::string endereco;
     std::string cpf;
     std::string numeroContaCorrente;
+    Saldo saldo;
 };
 
 class Usuario {
 public:
     // Função para criar um novo usuário
-    void criarNovoUsuario(const std::string& nomeArquivo = "usuarios.txt");
+    void criarNovoUsuario();
     std::string gerarNumeroContaCorrente();
-    void salvarUsuariosEmArquivo(const std::string& nomeArquivo = "usuarios.txt") const;
-    void carregarUsuariosDeArquivo(const std::string& nomeArquivo = "usuarios.txt");
-    bool usuarioExiste(const std::string& nome) const;
-    bool fazerLogin(const std::string& cpf, const std::string& senha) const;
-    double obterSaldo() const;
-
+    static bool cpfExistente(const std::string& cpf);
+    static const std::vector<DadosUsuario>& getUsuarios();
+    
 private:
     // Vetor para armazenar os usuários
-    std::vector<DadosUsuario> usuarios;
+    static std::vector<DadosUsuario> usuarios;
     bool senhaValida(const std::string& senha_) const;
     std::set<std::string> numerosContaCorrenteGerados_;
-    Saldo saldo;
 };
 
-#endif // USUARIO_HPP
+#endif
