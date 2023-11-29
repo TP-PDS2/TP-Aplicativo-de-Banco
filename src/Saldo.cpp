@@ -1,5 +1,6 @@
 #include "Saldo.hpp"
 #include <iomanip>
+#include <cmath>
 
 Saldo::Saldo() : saldo(0.0) {}
 
