@@ -8,13 +8,13 @@ double Saldo::obterSaldo() const {
 }
 
 void Saldo::adicionarSaldo(double valor) {
-    saldo += valor;
+    saldo += (abs(valor));
 }
 
 bool Saldo::diminuirSaldo(double valor) {
-    if (valor > saldo) {
+    if ((abs(valor)) > saldo) {
         return false; // Não há saldo suficiente para a operação
     }
-    saldo -= valor;
+    saldo -= (abs(valor));
     return true;
 }
