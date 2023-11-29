@@ -11,10 +11,11 @@ public:
 private:
     static void exibirMensagemBoasVindas();
     void cadastrarNovoUsuario();
-    void listarCPFsCadastrados();
-    void realizarOperacoesAposLogin();
     std::vector<DadosUsuario> usuarios;
-
+    DadosUsuario usuarioLogado;
+    void fazerLogin();
+    Usuario usuario;
+    void realizarOperacoesAposLogin();
     int opcao; 
 };
 
