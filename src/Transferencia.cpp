@@ -14,3 +14,20 @@ void Transferencia::realizarTransferencia(double valor) {
         std::cout << "Saldo insuficiente para realizar a transferência." << std::endl;
     }
 }
+// aparentemente é isso aqui, mas tem que modificar algumas coisas 
+// #include "Transferencia.hpp"
+// #include <cmath>
+// #include "Saldo.cpp"  
+// #include "Usuario.cpp"
+// Transferencia::Transferencia(Usuario& remetente, Usuario& destinatario)
+//     : remetente_(remetente), destinatario_(destinatario) {}
+
+// void Transferencia::realizarTransferencia(double valor) {
+//     valor = fabs(valor);
+//     if (remetente_.obterSaldo().diminuirSaldo(valor)) {
+//         destinatario_.obterSaldo().adicionarSaldo(valor);
+//         std::cout << "Transferência de R$ " << valor << " realizada com sucesso." << std::endl;
+//     } else {
+//         std::cout << "Saldo insuficiente para realizar a transferência." << std::endl;
+//     }
+// }
