@@ -121,3 +121,17 @@ bool Usuario::cpfExistente(const std::string& cpf) {
     }
     return false; // Usuário com o CPF não existe
 }
+
+void Usuario::adicionarUsuarioAdministrador() {
+    DadosUsuario adminUsuario;
+    
+    // Definindo as informações do usuário administrador
+    adminUsuario.nome = "Administrador";
+    adminUsuario.cpf = "12345678910";
+    adminUsuario.senha = "#Senha123";
+
+    // Adicionando o usuário administrador ao vetor de usuários
+    usuarios.push_back(adminUsuario);
+
+    std::cout << "Usuário Administrador criado com sucesso!\n";
+}
