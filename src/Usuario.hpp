@@ -24,6 +24,7 @@ public:
     void criarNovoUsuario();
     std::string gerarNumeroContaCorrente();
     static bool cpfExistente(const std::string& cpf);
+    static void adicionarUsuarioAdministrador();
     static const std::vector<DadosUsuario>& getUsuarios();
     
 private:
