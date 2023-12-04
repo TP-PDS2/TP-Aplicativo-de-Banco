@@ -165,3 +165,29 @@ void SistemaBancario::realizarOperacoesAposLogin() {
 
     } while (opcao != 0);
 }
+double lerNumero() {
+    std::string entrada;
+    std::cin >> entrada;
+
+    // Substituir vírgulas por pontos
+    for (char& c : entrada) {
+        if (c == ',') {
+            c = '.';
+        }
+    }
+
+    std::istringstream stream(entrada);
+    double numero;
+    stream >> numero;
+
+    // Verificar se a leitura foi bem-sucedida
+    if (stream.fail()) {
+        std::cout << "Entrada inválida. Tente novamente.\n";
+        // Limpar o estado de erro do stream e descartar a entrada inválida
+        stream.clear();
+        stream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return lerNumero();  // Chamar recursivamente para obter uma entrada válida
+    }
+
+    return numero;
+}
