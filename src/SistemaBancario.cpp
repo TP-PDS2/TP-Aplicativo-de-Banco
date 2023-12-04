@@ -135,16 +135,22 @@ void SistemaBancario::realizarOperacoesAposLogin() {
 
         switch (opcao) {
           case 1:
-              double valorDeposito;
+          {
               std::cout << "Informe o valor do depósito: R$ ";
-              std::cin >> valorDeposito;
-              if (valorDeposito >= 0.0){
-                  usuarioLogado.getSaldo().adicionarSaldo(valorDeposito); // Ajuste para acessar o saldo do usuário logado
+              double valorDeposito;
+
+              // Ler o valor do depósito considerando vírgula ou ponto decimal
+              std::cin >> std::ws;  // Descartar espaços em branco
+              valorDeposito = lerNumero();
+
+              if (valorDeposito >= 0.0) {
+                  usuarioLogado.saldo.adicionarSaldo(valorDeposito);
                   std::cout << "Depósito realizado com sucesso!\n";
               } else {
                   std::cout << "Valor de depósito inválido. O valor deve ser maior ou igual a zero.\n";
               }
               break;
+          }
           case 2:
               std::cout << "\nInformacoes do Usuário:\n";
               std::cout << "Nome: " << usuarioLogado.getNome() << "\n";
