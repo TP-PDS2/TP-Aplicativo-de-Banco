@@ -71,6 +71,13 @@ do {
 }
 
     bool Usuario::validarDataNascimento(const std::string& data) const {
+        const std::regex formatoData("^\\d{2}/\\d{2}/\\d{4}$");
+  
+        if (!std::regex_match(data, formatoData)) {
+            std::cout << "Data de nascimento inválida. Use o formato DD/MM/AAAA.\n";
+            return false;
+        }
+
 
 
 bool Usuario::senhaValida(const std::string& senha_) const {
