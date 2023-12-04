@@ -77,6 +77,29 @@ do {
             std::cout << "Data de nascimento inválida. Use o formato DD/MM/AAAA.\n";
             return false;
         }
+  
+        // Extrair dia, mês e ano
+        int dia, mes, ano;
+        sscanf(data.c_str(), "%2d/%2d/%4d", &dia, &mes, &ano);
+  
+        // Verificar se o mês está entre 1 e 12
+        if (mes < 1 || mes > 12) {
+            std::cout << "Mês inválido. Deve estar entre 1 e 12.\n";
+            return false;
+        }
+  
+        // Verificar dias em meses específicos
+      if ((dia < 1) || 
+          (dia > 31 && (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12)) ||
+          (dia > 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11)) ||
+          (dia > 29 && mes == 2 && (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0))) ||
+          (dia > 28 && mes == 2 && !(ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0)))) 
+      {
+          std::cout << "Dia inválido para o mês especificado.\n";
+          return false;
+      }
+        return true;
+    }
 
 
 
