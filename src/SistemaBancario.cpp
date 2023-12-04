@@ -124,7 +124,7 @@ void SistemaBancario::realizarOperacoesAposLogin() {
         std::cout << "\n========================================\n";
         std::cout << "Bem-vindx, " << usuarioLogado.nome << "!\n";
         std::cout << "CC: " << usuarioLogado.numeroContaCorrente << "\n";
-        std::cout << "Saldo: R$ " << usuarioLogado.saldo.getSaldo() << "\n";
+        std::cout << "Saldo: R$ " << usuarioLogado.saldo.obterSaldo() << "\n";
         std::cout << "========================================\n";
         std::cout << "Escolha uma acao:\n";
         std::cout << "1. Fazer um novo depósito\n";
@@ -153,7 +153,7 @@ void SistemaBancario::realizarOperacoesAposLogin() {
                 std::cout << "Data de Nascimento: " << usuarioLogado.dataNascimento << "\n";
                 std::cout << "Endereço: " << usuarioLogado.endereco << "\n";
                 std::cout << "CC: " << usuarioLogado.numeroContaCorrente << "\n";
-                std::cout << "Saldo: R$ " << usuarioLogado.saldo.getSaldo() << "\n";
+                std::cout << "Saldo: R$ " << usuarioLogado.saldo.obterSaldo() << "\n";
                 std::cout << "========================================\n";
                 break;
             case 3:
