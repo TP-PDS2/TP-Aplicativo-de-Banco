@@ -159,15 +159,20 @@ bool Usuario::cpfExistente(const std::string& cpf) {
 }
 
 void Usuario::adicionarUsuarioAdministrador() {
-    DadosUsuario adminUsuario;
-    
-    // Definindo as informações do usuário administrador
-    adminUsuario.nome = "Administrador";
-    adminUsuario.cpf = "12345678910";
-    adminUsuario.senha = "#Senha123";
+    // Verificar se o usuário administrador já existe antes de adicioná-lo novamente
+    if (!cpfExistente("12345678910")) {
+        DadosUsuario adminUsuario;
+        
+        // Definindo as informações do usuário administrador
+        adminUsuario.nome = "Administrador";
+        adminUsuario.cpf = "12345678910";
+        adminUsuario.senha = "#Senha123";
 
-    // Adicionando o usuário administrador ao vetor de usuários
-    usuarios.push_back(adminUsuario);
+        // Adicionando o usuário administrador ao vetor de usuários
+        usuarios.push_back(adminUsuario);
 
-    std::cout << "Usuário Administrador criado com sucesso!\n";
+        std::cout << "Usuário Administrador criado com sucesso!\n";
+    } else {
+        std::cout << "Usuário Administrador já existe.\n";
+    }
 }
