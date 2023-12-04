@@ -26,6 +26,9 @@ public:
     static bool cpfExistente(const std::string& cpf);
     static void adicionarUsuarioAdministrador();
     static const std::vector<DadosUsuario>& getUsuarios();
+    double obterSaldo() const;
+    void adicionarSaldo(double valor);
+    bool diminuirSaldo(double valor);
     
 private:
     // Vetor para armazenar os usuários
