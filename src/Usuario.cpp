@@ -164,9 +164,11 @@ void Usuario::adicionarUsuarioAdministrador() {
         DadosUsuario adminUsuario;
         
         // Definindo as informações do usuário administrador
+        
         adminUsuario.nome = "Administrador";
         adminUsuario.cpf = "12345678910";
         adminUsuario.senha = "#Senha123";
+        adminUsuario.numeroContaCorrente = "123456";
 
         // Adicionando o usuário administrador ao vetor de usuários
         usuarios.push_back(adminUsuario);
