@@ -2,6 +2,7 @@
 #include "SistemaBancario.hpp"
 #include "Usuario.hpp"
 #include "Desenvolvedor.hpp"
+#include <locale>
 
 SistemaBancario::SistemaBancario() : opcao(0) {}
 
