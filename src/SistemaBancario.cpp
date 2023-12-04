@@ -2,7 +2,6 @@
 #include "SistemaBancario.hpp"
 #include "Usuario.hpp"
 #include "Desenvolvedor.hpp"
-#include <locale>
 
 SistemaBancario::SistemaBancario() : opcao(0) {}
 
@@ -74,7 +73,6 @@ void SistemaBancario::executarAplicativo() {
     } while (continuarExecucao);
 }
 
-
 void SistemaBancario::cadastrarNovoUsuario() {
     usuario.criarNovoUsuario();
 }
@@ -136,40 +134,28 @@ void SistemaBancario::realizarOperacoesAposLogin() {
         std::cin >> opcao;
 
         switch (opcao) {
-            case 1:
-                double valorDeposito;
-                std::cout << "Informe o valor do depósito: R$ ";
-                std::cin >> valorDeposito;
-                if (valorDeposito >= 0.0){
-                    usuarioLogado.saldo.adicionarSaldo(valorDeposito);
-                    std::cout << "Depósito realizado com sucesso!\n";
-                } else {
-                    std::cout << "Valor de depósito inválido. O valor deve ser maior ou igual a zero.\n";
-                }
-                break;
-            case 2:
-                std::cout << "\nInformacoes do Usuário:\n";
-                std::cout << "Nome: " << usuarioLogado.nome << "\n";
-                std::cout << "CPF: " << usuarioLogado.cpf << "\n";
-                std::cout << "Data de Nascimento: " << usuarioLogado.dataNascimento << "\n";
-                std::cout << "Endereço: " << usuarioLogado.endereco << "\n";
-                std::cout << "CC: " << usuarioLogado.numeroContaCorrente << "\n";
-                std::cout << "Saldo: R$ " << usuarioLogado.saldo.obterSaldo() << "\n";
-                std::cout << "========================================\n";
-                break;
-            case 3:
-                std::cout << "Funcionalidade ainda será implementada.\n";
-                break;
-            case 0:
-               std::cout << "Fazendo logout e voltando ao menu principal.\n";
-               executarAplicativo();       // Chama a função para retornar ao menu principal
-               break;
-
-            default:
-                std::cout << "Opção inválida. Tente novamente.\n";
-                break;
+          case 1:
+              double valorDeposito;
+              std::cout << "Informe o valor do depósito: R$ ";
+              std::cin >> valorDeposito;
+              if (valorDeposito >= 0.0){
+                  usuarioLogado.getSaldo().adicionarSaldo(valorDeposito); // Ajuste para acessar o saldo do usuário logado
+                  std::cout << "Depósito realizado com sucesso!\n";
+              } else {
+                  std::cout << "Valor de depósito inválido. O valor deve ser maior ou igual a zero.\n";
+              }
+              break;
+          case 2:
+              std::cout << "\nInformacoes do Usuário:\n";
+              std::cout << "Nome: " << usuarioLogado.getNome() << "\n";
+              std::cout << "CPF: " << usuarioLogado.getCPF() << "\n";
+              std::cout << "Data de Nascimento: " << usuarioLogado.getDataNascimento() << "\n";
+              std::cout << "Endereço: " << usuarioLogado.getEndereco() << "\n";
+              std::cout << "CC: " << usuarioLogado.getNumeroContaCorrente() << "\n";
+              std::cout << "Saldo: R$ " << usuarioLogado.getSaldo().obterSaldo() << "\n"; // Ajuste para acessar o saldo do usuário logado
+              std::cout << "========================================\n";
+              break;
         }
 
     } while (opcao != 0);
 }
-
