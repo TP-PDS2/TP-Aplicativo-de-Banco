@@ -29,6 +29,7 @@ public:
     double obterSaldo() const;
     void adicionarSaldo(double valor);
     bool diminuirSaldo(double valor);
+    bool validarDataNascimento(const std::string& data) const;
     
 private:
     // Vetor para armazenar os usuários
