@@ -104,10 +104,23 @@ Como um cliente, eu quero poder solicitar empréstimos ou financiamentos diretam
 # Descrição da funcionalidade das classes
 
 *SistemaBancario:*
--
+Responsabilidade Principal: Gerenciar o sistema bancário, fornecendo uma interface para interação com o usuário.
+
+_Métodos Principais:_
+
+ executarAplicativo(): Inicia a execução do aplicativo, permitindo que o usuário escolha entre cada funcionalidade.
+ cadastrarNovoUsuario(): Chama o método de criação de novo usuário da classe Usuario e atualiza o mapa de saldos.
+ fazerLogin(): Realiza o processo de login, solicitando CPF e senha e verificando a correspondência.
+ realizarOperacoesAposLogin(): Oferece opções de operações após o login, como depósito, visualização de informações do usuário, etc.
 
 *Usuario:*
--
+Responsabilidade Principal: Gerenciar informações e operações relacionadas aos usuários.
+
+_Métodos Principais:_
+
+ criarNovoUsuario(): Coleta informações para criar um novo usuário.
+ cpfExistente(const std::string& cpf): Verifica se um CPF já existe na lista de usuários.
+ adicionarUsuarioAdministrador(): Adiciona um usuário administrador ao sistema.
 
 *Saldo:*
 -
