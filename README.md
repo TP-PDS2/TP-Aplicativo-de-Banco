@@ -170,5 +170,6 @@ _Métodos Principais:_
 - `double calcularValorParcela()`: Calcula o valor de cada parcela do empréstimo. Chama o método `calcularJuros()` para calcular o valor total e, em seguida, imprime na saída padrão o valor total a ser pago e o valor de cada parcela, retornando o valor de cada parcela.
 - `double confirmarSolicitacao(double salario)`: Verifica se o salário do solicitante é suficiente para garantir o empréstimo. Verifica se o salário é maior que a metade do valor de cada parcela. Se for, confirma a solicitação do empréstimo; caso contrário, indica que o salário é insuficiente.
 
-
+*Desenvolvedor:*
+- A classe `Desenvolvedor` foi criada apenas com o intuito de auxiliar nos testes internos feitos, para analisar como o vetor de usuários estava reagindo conforme seus atributos e instâncias eram modificados. 
 
