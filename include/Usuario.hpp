@@ -28,6 +28,7 @@ public:
     static bool cpfExistente(const std::string& cpf);
     static void adicionarUsuarioAdministrador();
     static std::vector<DadosUsuario>& getUsuarios();
+    bool validarDataNascimento(const std::string& data) const;
     
 private:
     // Vetor para armazenar os usuários
