@@ -104,39 +104,71 @@ Como um cliente, eu quero poder solicitar empréstimos ou financiamentos diretam
 # Descrição da funcionalidade das classes
 
 *SistemaBancario:*
--
+- A classe `SistemaBancario` é responsável por gerenciar as operações principais do aplicativo bancário, interagindo com os usuários e permitindo que realizem várias ações dentro do sistema. Ela contém métodos para criar novos usuários, fazer login, realizar operações após o login e executar o aplicativo como um todo. Essa classe coordena a interação entre o usuário e as funcionalidades do sistema bancário, oferecendo uma interface para que as operações bancárias sejam executadas de forma organizada e segura.
+  
 Responsabilidade Principal: Gerenciar o sistema bancário, fornecendo uma interface para interação com o usuário.
 
 _Métodos Principais:_
 
- - executarAplicativo(): Inicia a execução do aplicativo, permitindo que o usuário escolha entre cada funcionalidade.
- - cadastrarNovoUsuario(): Chama o método de criação de novo usuário da classe Usuario e atualiza o mapa de saldos.
- - fazerLogin(): Realiza o processo de login, solicitando CPF e senha e verificando a correspondência.
- - realizarOperacoesAposLogin(): Oferece opções de operações após o login, como depósito, visualização de informações do usuário, etc.
+ - `executarAplicativo()`: Inicia a execução do aplicativo, permitindo que o usuário escolha entre cada funcionalidade.
+ - `cadastrarNovoUsuario()`: Chama o método de criação de novo usuário da classe Usuario e atualiza o mapa de saldos.
+ - `fazerLogin()`: Realiza o processo de login, solicitando CPF e senha e verificando a correspondência.
+ - `realizarOperacoesAposLogin()`: Oferece opções de operações após o login, como depósito, visualização de informações do usuário, etc.
 
 *Usuario:*
--
+- A classe `Usuario` é responsável por gerenciar as operações relacionadas aos usuários de um sistema bancário fictício. Ela mantém informações de cada usuário, como nome, senha, data de nascimento, endereço, CPF, número da conta corrente, saldo e extrato. A estrutura `DadosUsuario` define os atributos de um usuário. As funções empregadas permitem criar, excluir e validar informações de usuários no sistema bancário simulado. O código também faz uso de vetores, conjuntos, operações de entrada e saída, bem como expressões regulares para validação de dados.
+  
 Responsabilidade Principal: Gerenciar informações e operações relacionadas aos usuários.
 
 _Métodos Principais:_
 
-- criarNovoUsuario(): Coleta informações para criar um novo usuário.
-- senhaValida(): Verifica se a senha que o usuário quer utilizar é segura de acordo com os pré-requisitos escolhidos pelos desenvolvedores. 
-- cpfExistente(const std::string& cpf): Verifica se um CPF já existe na lista de usuários.
-- gerarNumeroContaCorrente(): Cria uma conta corrente única para o usuário e a vincula ao mesmo.
-- deletarConta(): Da ao usuário logado a opção de excluir a sua conta bancária.
+- `criarNovoUsuario()`: Coleta informações para criar um novo usuário.
+- `cpfExistente(const std::string& cpf)`: Verifica se um CPF já existe na lista de usuários.
+- `adicionarUsuarioAdministrador()`: Adiciona um usuário administrador ao sistema.
 
 *Saldo:*
--
+- A classe `Saldo` é responsável por gerenciar o saldo de uma conta bancária. Ela permite obter o saldo atual e adicionar um valor específico ao saldo. Essa classe encapsula a lógica do saldo da conta bancária, fornecendo métodos para consultar e modificar o saldo. Ao separar essa lógica em uma classe separada, é possível garantir que as operações relacionadas ao saldo sejam consistentes e fáceis de entender, facilitando a manutenção e evolução do sistema bancário.
+
+Responsabilidade Principal: Gerenciar o saldo da conta bancária, sempre atualizando o valor.
+
+_Métodos Principais:_
+
+- `Saldo()`: O construtor inicializa o saldo como 0.0 quando um objeto da classe `Saldo` é criado.
+- `double getSaldo() const`: Este método retorna o saldo atual da conta. É marcado como constante (`const`), indicando que não altera o estado interno do objeto.
+- `void adicionarSaldo(double valor)`: Permite adicionar um valor específico ao saldo atual da conta.
 
 *Transferencia:*
--
+- A classe `Transferencia` facilita a transferência de valores entre dois usuários no sistema bancário. Ela recebe como parâmetros dois objetos do tipo `Usuario` - o remetente e o destinatário da transferência. Essa classe encapsula a lógica de transferência de valores entre usuários, permitindo que a lógica de manipulação do saldo e das operações bancárias específicas seja centralizada e reutilizável dentro do sistema.
+
+Responsabilidade Principal: Realizar a transfência de valores entre as contas cadastradas no banco.
+
+_Métodos Principais:_
+
+- `Transferencia(Usuario& remetente, Usuario& destinatario)`: O construtor recebe referências para o remetente e o destinatário da transferência.
+- `void realizarTransferencia(double valor)`: Este método realiza a transferência de um determinado valor do saldo do remetente para o saldo do destinatário. Verifica se o saldo do remetente é suficiente para realizar a transferência. Caso seja possível, diminui o saldo do remetente e aumenta o saldo do destinatário em conformidade com o valor transferido.
 
 *Extrato:*
--
+- A classe `Extrato` é responsável por gerenciar as transações financeiras e fornecer métodos para exibir essas transações e exportá-las para um arquivo de texto. Essa classe encapsula as funcionalidades relacionadas ao extrato de transações, permitindo que o sistema bancário registre e manipule esses registros de forma organizada, exibindo as transações para o usuário ou exportando-as para um arquivo de texto para fins de registro ou auditoria.
+
+Responsabilidade Principal: Gerenciar transações e depósitos, além de fornecer o extrato na tela ou em arquivo .txt.
+
+_Métodos Principais:_
+
+- `void informarExtrato()`: Este método percorre todas as transações registradas e as exibe na saída padrão. Identifica se cada transação é um depósito ou uma transferência e exibe o valor correspondente.
+- `void adicionarTransacao(double valor)`: Adiciona uma nova transação ao extrato, armazenando o valor fornecido na lista de transações.
+- `void exportarExtratoDigital(std::string cc)`: Cria um arquivo de texto contendo o extrato das transações. Percorre todas as transações registradas e escreve os detalhes de cada uma no arquivo, identificando se é um depósito ou uma transferência, assim como o valor correspondente.
 
 *Emprestimo:*
--
+- A classe `Emprestimo` é responsável por simular e calcular as condições e valores relacionados a um empréstimo.
+
+Responsabilidade Principal: Analisar a solicitação de emprestimo, calculando as condições.
+
+_Métodos Principais:_
+
+- `Emprestimo(double valorTransferencia, unsigned int parcelas)`: O construtor da classe inicializa os valores do empréstimo, como o valor total do empréstimo (`valorTotal`), a quantidade de parcelas (`qtdParcelas`) e a taxa de juros (`taxaJuros`).
+- `void calcularJuros()`: Calcula o valor total a ser pago, incluindo os juros. Essa função aplica a lógica para calcular os juros sobre o valor do empréstimo.
+- `double calcularValorParcela()`: Calcula o valor de cada parcela do empréstimo. Chama o método `calcularJuros()` para calcular o valor total e, em seguida, imprime na saída padrão o valor total a ser pago e o valor de cada parcela, retornando o valor de cada parcela.
+- `double confirmarSolicitacao(double salario)`: Verifica se o salário do solicitante é suficiente para garantir o empréstimo. Verifica se o salário é maior que a metade do valor de cada parcela. Se for, confirma a solicitação do empréstimo; caso contrário, indica que o salário é insuficiente.
 
 
 
