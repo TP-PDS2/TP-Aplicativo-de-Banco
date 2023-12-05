@@ -24,6 +24,7 @@ class Usuario {
 public:
     // Função para criar um novo usuário
     void criarNovoUsuario();
+    void deletarConta();
     std::string gerarNumeroContaCorrente();
     static bool cpfExistente(const std::string& cpf);
     static void adicionarUsuarioAdministrador();
