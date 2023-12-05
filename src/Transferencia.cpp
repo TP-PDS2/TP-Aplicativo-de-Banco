@@ -1,4 +1,4 @@
-       //////////comentario do arthur: se der certo atrelar o saldo ao numero de cc a gnt vai poder mofificar essa classe pra nao precisar de ter a variavel de rementente e destinatario, a gnt so puxa a cc como parametro
+//////////comentario do arthur: se der certo atrelar o saldo ao numero de cc a gnt vai poder mofificar essa classe pra nao precisar de ter a variavel de rementente e destinatario, a gnt so puxa a cc como parametro
        //////////comentario do Isaac: acho que está funcionando
  #include "Transferencia.hpp"
  #include <cmath>
