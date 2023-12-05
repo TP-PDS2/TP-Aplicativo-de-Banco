@@ -2,6 +2,8 @@
 #define SISTEMABANCARIO_HPP
 
 #include "Usuario.hpp"
+#include "Transferencia.hpp"
+#include "Emprestimo.hpp"
 
 class SistemaBancario {
 public:
