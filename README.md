@@ -121,8 +121,11 @@ Responsabilidade Principal: Gerenciar informações e operações relacionadas a
 _Métodos Principais:_
 
 - criarNovoUsuario(): Coleta informações para criar um novo usuário.
+- senhaValida(): Verifica se a senha que o usuário quer utilizar é segura de acordo com os pré-requisitos escolhidos pelos desenvolvedores. 
 - cpfExistente(const std::string& cpf): Verifica se um CPF já existe na lista de usuários.
-- adicionarUsuarioAdministrador(): Adiciona um usuário administrador ao sistema.
+- gerarNumeroContaCorrente(): Cria uma conta corrente única para o usuário e a vincula ao mesmo.
+- deletarConta(): Da ao usuário logado a opção de excluir a sua conta bancária.
+- 
 
 *Saldo:*
 -
