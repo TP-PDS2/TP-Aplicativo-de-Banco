@@ -6,17 +6,17 @@
 
 class Emprestimo {
 private:
-    int idContaCorrente;
-    std::string dataVencimento;
+    double valorPagamento;
     double valorTotal;
     double taxaJuros;
     int qtdParcelas;
 
 public:
     // Métodos para definir e obter informações sobre o empréstimo
-    double calcularJuros();
+    Emprestimo (double valorTransferencia, unsigned int parcelas);
+    void calcularJuros();
     double calcularValorParcela();
-    void confirmarSolicitacao();
+    double confirmarSolicitacao(double salario);
 };
 
 #endif
