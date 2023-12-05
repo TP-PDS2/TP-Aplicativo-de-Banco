@@ -30,6 +30,8 @@ Permite que os clientes solicitem empréstimos ou financiamentos diretamente pel
 
 Será assegurado a individualidade e segurança de cada conta na realização do login, fazendo a conferância se a senha digitada está correta para o CPF que está tentando realizar o login. Um menu simples com as operações possíveis será mostrado para o usuário, nele contendo o número da CC e seu saldo em conta. Em cada transação bancária ou depósito o usuário deverá digitar a sua senha de login corretamente, como forma de confirmar sua identidade na ação. 
 
+Pensando também em usuário com alguma deficiência cognitiva ou que tenham dificuldades com tecnologias novas, como idosos, foram colocadas saídas de tela o mais claras e obejtivas possível a respeito das operações realizadas ou passos a serem seguidos.
+
 Utilizando os principios da Programação Defensiva, foram feitas estruturas de conferência quando ao número de digitos do CPF, o formato da data de nascimento inserida e se a senha escolhida atende aos requisitos para ser validada. Essas estruturas serão explicadas no tópico "Descrição da Funcionalidade das Classes". 
 
 O trabalho foi criado pensando em cumprir com os Critérios de Aceitação das User Stories abaixo: 
