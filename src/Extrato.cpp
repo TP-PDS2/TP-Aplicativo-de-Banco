@@ -1,13 +1,34 @@
 #include "Extrato.hpp"
 
-void Extrato::informarExtratoAnual(int idConta) {
-    // Lógica para exibir extrato anual
+void Extrato::informarExtrato(){
+    for(auto i=0; i<transacoes.size();++i){
+        if(transacoes[i]<0){
+            std::cout<<"TRANSFERENCIA: -R$";
+            std::cout<<-1*transacoes[i]<<std::endl;
+        }
+        else{
+            std::cout<<"DEPOSITO:";
+            std::cout<<transacoes[i]<<std::endl;
+        }
+    }
 }
 
-void Extrato::informarExtratoMensal(int idConta) {
-    // Lógica para exibir extrato mensal
+void Extrato::adicionarTransacao(double valor){
+    transacoes.push_back(valor);
 }
 
-void Extrato::exportarExtratoDigital(int idConta) {
-    // Lógica para exportar extrato digital
+void Extrato::exportarExtratoDigital(std::string cc){
+    std::ofstream saida ("./extrato"+cc+".txt");
+     for(auto i=0; i<transacoes.size();++i){
+        if(transacoes[i]<0){
+            saida<<"TRANFERENCIA: -R$";
+            saida<<-1*transacoes[i]<<std::endl;
+        }else{
+            saida<<"DEPOSITO: R$";
+            saida<<transacoes[i]<<std::endl;
+        }
+
+    }
+    saida.close();
+
 }

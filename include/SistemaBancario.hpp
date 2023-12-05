@@ -7,13 +7,13 @@ class SistemaBancario {
 public:
     void executarAplicativo();
     SistemaBancario();
-    double lerNumero();
 
 private:
     static void exibirMensagemBoasVindas();
     void cadastrarNovoUsuario();
     std::vector<DadosUsuario> usuarios;
-    DadosUsuario usuarioLogado;
+    DadosUsuario* usuarioLogado;
+    DadosUsuario* usuarioTransfere;
     void fazerLogin();
     Usuario usuario;
     void realizarOperacoesAposLogin();

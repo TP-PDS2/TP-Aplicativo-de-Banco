@@ -2,9 +2,6 @@
 #include "SistemaBancario.hpp"
 #include "Usuario.hpp"
 #include "Desenvolvedor.hpp"
-#include <locale>
-#include <limits>
-#include <sstream> 
 
 SistemaBancario::SistemaBancario() : opcao(0) {}
 
@@ -76,6 +73,7 @@ void SistemaBancario::executarAplicativo() {
     } while (continuarExecucao);
 }
 
+
 void SistemaBancario::cadastrarNovoUsuario() {
     usuario.criarNovoUsuario();
 }
@@ -100,12 +98,12 @@ void SistemaBancario::fazerLogin() {
         std::cin >> senha;
 
         // Verificar se a senha corresponde ao CPF fornecido
-        const std::vector<DadosUsuario>& usuarios = Usuario::getUsuarios();
-        for (const auto& usuario : usuarios) {
+        std::vector<DadosUsuario>& usuarios = Usuario::getUsuarios();
+        for (auto& usuario : usuarios) {
             if (usuario.cpf == cpf && usuario.senha == senha) {
                 // Login bem-sucedido
                 std::cout << "Login realizado com sucesso!\n";
-                usuarioLogado = usuario; 
+                usuarioLogado = &usuario; 
                 realizarOperacoesAposLogin();
                 return;
             }
@@ -116,81 +114,126 @@ void SistemaBancario::fazerLogin() {
     } while (true);  // Loop até que a senha seja correta
 }
 
-const std::vector<DadosUsuario>& Usuario::getUsuarios() {
+std::vector<DadosUsuario>& Usuario::getUsuarios() {
     return usuarios;
 }
 
 void SistemaBancario::realizarOperacoesAposLogin() {
     int opcao;
     do {
-        std::cout << "\n========================================\n";
-        std::cout << "Bem-vindx, " << usuarioLogado.nome << "!\n";
-        std::cout << "CC: " << usuarioLogado.numeroContaCorrente << "\n";
-        std::cout << "Saldo: R$ " << usuarioLogado.saldo.obterSaldo() << "\n";
+        std::cout << "Bem-vindx, " << usuarioLogado->nome << "!\n";
+        std::cout << "CC: " << usuarioLogado->numeroContaCorrente << "\n";
+        std::cout << "Saldo: R$ " << usuarioLogado->saldo.getSaldo() << "\n";
         std::cout << "========================================\n";
         std::cout << "Escolha uma acao:\n";
         std::cout << "1. Fazer um novo depósito\n";
-        std::cout << "2. Mostrar informacoes do usuário\n";
-        std::cout << "3. Excluir conta do usuário\n";
+        std::cout << "2. Fazer uma transferencia\n";
+        std::cout << "3. Mostrar informacoes do usuário\n";
+        std::cout << "4. Emprestimo\n";
+        std::cout << "5. Extrato\n";
         std::cout << "0. Fazer logout e voltar ao menu principal\n";
         std::cout << "Opção: ";
         std::cin >> opcao;
 
         switch (opcao) {
-          case 1:
-          {
-              std::cout << "Informe o valor do depósito: R$ ";
-              double valorDeposito;
+            case 1:
+                double valorDeposito;
+                std::cout << "Informe o valor do depósito: R$ ";
+                std::cin >> valorDeposito;
+                if (valorDeposito >= 0.0){
+                    usuarioLogado->extrato.adicionarTransacao(valorDeposito);
+                    usuarioLogado->saldo.adicionarSaldo(valorDeposito);
+                    std::cout << "Depósito realizado com sucesso!\n";
+                } else {
+                    std::cout << "Valor de depósito inválido. O valor deve ser maior ou igual a zero.\n";
+                }
+                break;
+            case 2:{
+                bool encontrada=true;
+                double valorTransferencia;
+                std::string numeroCC, senha;
+                std::cout << "Digite o numero da Conta Corrente: ";
+                std::cin >> numeroCC;
 
-              // Ler o valor do depósito considerando vírgula ou ponto decimal
-              std::cin >> std::ws;  // Descartar espaços em branco
-              valorDeposito = lerNumero();
+                // Verificar se a senha corresponde ao CPF fornecido
+                std::vector<DadosUsuario>& usuarios = Usuario::getUsuarios();
+                for (auto& usuario : usuarios) {
+                    if (usuario.numeroContaCorrente == numeroCC && usuarioLogado->numeroContaCorrente != numeroCC) {
+                        //conta encontrada
+                        encontrada=true;
+                        std::cout << "Informe o valor da transferencia: R$ ";
+                        std::cin >> valorTransferencia;
+                        std::cout << "Informe a sua senha:";
+                        std::cin >> senha;
+                        if(senha==usuarioLogado->senha){
+                            if (valorTransferencia >= 0.0){
+                                usuarioLogado->extrato.adicionarTransacao((-1)*valorTransferencia);
+                                usuarioLogado->saldo.adicionarSaldo((-1)*valorTransferencia);
+                                usuarioTransfere=&usuario;
+                                usuarioTransfere->extrato.adicionarTransacao(valorTransferencia);
+                                usuarioTransfere->saldo.adicionarSaldo(valorTransferencia);
 
-              if (valorDeposito >= 0.0) {
-                  usuarioLogado.saldo.adicionarSaldo(valorDeposito);
-                  std::cout << "Depósito realizado com sucesso!\n";
-              } else {
-                  std::cout << "Valor de depósito inválido. O valor deve ser maior ou igual a zero.\n";
-              }
-              break;
-          }
-          case 2:
-              std::cout << "\nInformacoes do Usuário:\n";
-              std::cout << "Nome: " << usuarioLogado.getNome() << "\n";
-              std::cout << "CPF: " << usuarioLogado.getCPF() << "\n";
-              std::cout << "Data de Nascimento: " << usuarioLogado.getDataNascimento() << "\n";
-              std::cout << "Endereço: " << usuarioLogado.getEndereco() << "\n";
-              std::cout << "CC: " << usuarioLogado.getNumeroContaCorrente() << "\n";
-              std::cout << "Saldo: R$ " << usuarioLogado.getSaldo().obterSaldo() << "\n"; // Ajuste para acessar o saldo do usuário logado
-              std::cout << "========================================\n";
-              break;
+                            }else {
+                                std::cout << "Valor de transferencia inválido. O valor deve ser maior ou igual a zero.\n";
+                            }
+                        }else{
+                            std::cout << "Senha  invalida.\n";
+                        }
+                        break;
+                    }
+                    else{
+                        encontrada=false;
+                    }
+                }
+                if(!encontrada){
+                    std::cout<<"Conta não cadastrada no sistema"<<std::endl;
+                }
+                break;
+            }
+            case 3:
+                std::cout << "\nInformacoes do Usuário:\n";
+                std::cout << "Nome: " << usuarioLogado->nome << "\n";
+                std::cout << "CPF: " << usuarioLogado->cpf << "\n";
+                std::cout << "Data de Nascimento: " << usuarioLogado->dataNascimento << "\n";
+                std::cout << "Endereço: " << usuarioLogado->endereco << "\n";
+                std::cout << "CC: " << usuarioLogado->numeroContaCorrente << "\n";
+                std::cout << "Saldo: R$ " << usuarioLogado->saldo.getSaldo() << "\n";
+                std::cout << "========================================\n";
+                break;
+            case 4:{
+                double valorSalario, valorEmprestimo;
+                unsigned int parcelas;
+                std::cout << "Digite o seu Salario: ";
+                std::cin >> valorSalario;
+                std::cout << "Digite o valor do Emprestimo: ";
+                std::cin >> valorEmprestimo;    
+                std::cout << "Digite o numero de parcelas mensais: ";
+                std::cin >> parcelas;            
+                // Verificar se a senha corresponde ao CPF fornecido
+                if(valorSalario>=(valorEmprestimo/(2*parcelas))){
+                    usuarioLogado->extrato.adicionarTransacao(valorEmprestimo);
+                    usuarioLogado->saldo.adicionarSaldo(valorEmprestimo);
+                    std::cout << "Emprestimo aprovado!\n";
+                    std::cout << "Parcelas de "<<valorEmprestimo/parcelas<<" a juros de 10%\n";
+
+                } else {
+                    std::cout << "Emprestimo negado.\n";
+                }
+                break;
+            }
+            case 5:
+                usuarioLogado->extrato.informarExtrato();
+                usuarioLogado->extrato.exportarExtratoDigital(usuarioLogado->numeroContaCorrente);
+                break;
+            case 0:
+               std::cout << "Fazendo logout e voltando ao menu principal.\n";
+               executarAplicativo();       // Chama a função para retornar ao menu principal
+               break;
+
+            default:
+                std::cout << "Opção inválida. Tente novamente.\n";
+                break;
         }
 
     } while (opcao != 0);
-}
-double lerNumero() {
-    std::string entrada;
-    std::cin >> entrada;
-
-    // Substituir vírgulas por pontos
-    for (char& c : entrada) {
-        if (c == ',') {
-            c = '.';
-        }
-    }
-
-    std::istringstream stream(entrada);
-    double numero;
-    stream >> numero;
-
-    // Verificar se a leitura foi bem-sucedida
-    if (stream.fail()) {
-        std::cout << "Entrada inválida. Tente novamente.\n";
-        // Limpar o estado de erro do stream e descartar a entrada inválida
-        stream.clear();
-        stream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return lerNumero();  // Chamar recursivamente para obter uma entrada válida
-    }
-
-    return numero;
 }
