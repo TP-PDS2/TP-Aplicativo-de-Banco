@@ -9,6 +9,7 @@ class SistemaBancario {
 public:
     void executarAplicativo();
     SistemaBancario();
+    double lerNumero();
 
 private:
     static void exibirMensagemBoasVindas();
