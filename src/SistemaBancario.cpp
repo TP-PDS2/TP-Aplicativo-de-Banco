@@ -166,16 +166,8 @@ void SistemaBancario::realizarOperacoesAposLogin() {
                         std::cout << "Informe a sua senha:";
                         std::cin >> senha;
                         if(senha==usuarioLogado->senha){
-                            if (valorTransferencia >= 0.0){
-                                usuarioLogado->extrato.adicionarTransacao((-1)*valorTransferencia);
-                                usuarioLogado->saldo.adicionarSaldo((-1)*valorTransferencia);
-                                usuarioTransfere=&usuario;
-                                usuarioTransfere->extrato.adicionarTransacao(valorTransferencia);
-                                usuarioTransfere->saldo.adicionarSaldo(valorTransferencia);
-
-                            }else {
-                                std::cout << "Valor de transferencia inválido. O valor deve ser maior ou igual a zero.\n";
-                            }
+                            Transferencia transferencia(usuarioLogado, &usuario);
+                            transferencia.realizarTransferencia(valorTransferencia);
                         }else{
                             std::cout << "Senha  invalida.\n";
                         }
@@ -210,15 +202,12 @@ void SistemaBancario::realizarOperacoesAposLogin() {
                 std::cout << "Digite o numero de parcelas mensais: ";
                 std::cin >> parcelas;            
                 // Verificar se a senha corresponde ao CPF fornecido
-                if(valorSalario>=(valorEmprestimo/(2*parcelas))){
-                    usuarioLogado->extrato.adicionarTransacao(valorEmprestimo);
-                    usuarioLogado->saldo.adicionarSaldo(valorEmprestimo);
-                    std::cout << "Emprestimo aprovado!\n";
-                    std::cout << "Parcelas de "<<valorEmprestimo/parcelas<<" a juros de 10%\n";
-
-                } else {
-                    std::cout << "Emprestimo negado.\n";
-                }
+                Emprestimo emprestimo(valorEmprestimo, parcelas);
+                    valorEmprestimo=emprestimo.confirmarSolicitacao(valorSalario);
+                    if(valorEmprestimo!=0){
+                        usuarioLogado->saldo.adicionarSaldo(valorEmprestimo);
+                        usuarioLogado->extrato.adicionarTransacao(valorEmprestimo);
+                    }
                 break;
             }
             case 5:
