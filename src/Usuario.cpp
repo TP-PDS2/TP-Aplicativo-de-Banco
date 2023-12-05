@@ -77,6 +77,47 @@ void Usuario::criarNovoUsuario()
     std::cout << "Novo usuário criado com sucesso!\n";
 }
 
+void Usuario::deletarConta() {
+    std::string numeroConta;
+    std::string nomeUsuario;
+    std::string senhaUsuario;
+
+    std::cout << "Para deletar sua conta, por favor, insira os seguintes dados:\n";
+    
+    std::cout << "Número da conta: ";
+    std::cin >> numeroConta;
+
+    std::cout << "Nome do usuário: ";
+    std::cin.ignore(); // Limpa o buffer do teclado
+    std::getline(std::cin, nomeUsuario);
+
+    std::cout << "Senha: ";
+    std::getline(std::cin, senhaUsuario);
+
+    // Encontrar o usuário com o número da conta fornecido
+    auto it = std::find_if(usuarios.begin(), usuarios.end(), [&](const DadosUsuario& usuario) {
+        return usuario.numeroContaCorrente == numeroConta &&
+               usuario.nome == nomeUsuario &&
+               usuario.senha == senhaUsuario;
+    });
+
+    if (it != usuarios.end()) {
+        // Confirmação do usuário para deletar a conta
+        char opcao;
+        std::cout << "Tem certeza que deseja deletar sua conta? (S/N): ";
+        std::cin >> opcao;
+
+        if (std::toupper(opcao) == 'S') {
+            usuarios.erase(it);
+            std::cout << "Conta deletada com sucesso.\n";
+        } else {
+            std::cout << "Operação de exclusão cancelada.\n";
+        }
+    } else {
+        std::cout << "Dados incorretos ou conta não encontrada.\n";
+    }
+}
+
 bool Usuario::senhaValida(const std::string &senha_) const
 {
     if (senha_.length() < 8 || senha_.length() > 30)
