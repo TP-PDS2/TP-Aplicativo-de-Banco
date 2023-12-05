@@ -7,6 +7,7 @@
 #include "Usuario.hpp"
 #include "Saldo.hpp"
 #include <iostream>
+#include <regex> 
 
 std::vector<DadosUsuario> Usuario::usuarios;
 
