@@ -214,6 +214,8 @@ void SistemaBancario::realizarOperacoesAposLogin() {
                 usuarioLogado->extrato.informarExtrato();
                 usuarioLogado->extrato.exportarExtratoDigital(usuarioLogado->numeroContaCorrente);
                 break;
+            case 6:
+                usuarioLogado->usuario.deletarConta();
             case 0:
                std::cout << "Fazendo logout e voltando ao menu principal.\n";
                executarAplicativo();       // Chama a função para retornar ao menu principal
