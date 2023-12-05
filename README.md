@@ -124,7 +124,7 @@ _Métodos Principais:_
 
 - `criarNovoUsuario()`: Coleta informações para criar um novo usuário.
 - `cpfExistente(const std::string& cpf)`: Verifica se um CPF já existe na lista de usuários.
-- `adicionarUsuarioAdministrador()`: Adiciona um usuário administrador ao sistema.
+- `deletarConta()`: Oferece ao usuário logado a opção de excluir a sua conta bancária.
 
 *Saldo:*
 - A classe `Saldo` é responsável por gerenciar o saldo de uma conta bancária. Ela permite obter o saldo atual e adicionar um valor específico ao saldo. Essa classe encapsula a lógica do saldo da conta bancária, fornecendo métodos para consultar e modificar o saldo. Ao separar essa lógica em uma classe separada, é possível garantir que as operações relacionadas ao saldo sejam consistentes e fáceis de entender, facilitando a manutenção e evolução do sistema bancário.
