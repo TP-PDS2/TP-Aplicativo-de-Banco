@@ -125,7 +125,6 @@ _Métodos Principais:_
 - cpfExistente(const std::string& cpf): Verifica se um CPF já existe na lista de usuários.
 - gerarNumeroContaCorrente(): Cria uma conta corrente única para o usuário e a vincula ao mesmo.
 - deletarConta(): Da ao usuário logado a opção de excluir a sua conta bancária.
-- 
 
 *Saldo:*
 -
